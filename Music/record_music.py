@@ -54,7 +54,7 @@ print('Output file: ~/' + path + '/' + file_name)
 os.system('timeout 0.1 rec  ' + '~/' + folder + '/' + file_name)
 
 # Start recording
-timeout = 21720         # Record time. Here: Timeout in seconds: 6h * 60min * 60sec = 21600sec + 2min = 21720; else: None
+timeout = 21720         # Record time. Here: Timeout in seconds: 6h * 60min * 60sec = 21600sec + 2min = 21720sec; default: None
 frequency = 44100       # Sampling frequency
 
 command = 'timeout ' + str(timeout) + ' pacat --record -d ' + module + ' | sox -t raw -r ' + str(frequency) + ' -s -L -b 16 -c 2 - "~/' + folder + '/' + file_name + '"'

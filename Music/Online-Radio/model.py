@@ -53,7 +53,7 @@ class LiveStream:
 		self.view.show_options(self)
 
 
-	def set_station(self, url):
+	def _set_station(self, url):
 		# Define VLC media
 		media = self.instance.media_new(url)
 		
@@ -107,7 +107,7 @@ class LiveStream:
 		
 		url = self.settings['urls'][self.settings['current_station_id']]
 		station_name = self.settings['stations'][self.settings['current_station_id']]
-		self.set_station(url)
+		self._set_station(url)
 		if self.state:
 			self.start()
 		self.view.show_station(station_name, url)
@@ -125,7 +125,7 @@ class LiveStream:
 		
 		url = self.settings['urls'][self.settings['current_station_id']]
 		station_name = self.settings['stations'][self.settings['current_station_id']]
-		self.set_station(url)
+		self._set_station(url)
 		if self.state:
 			self.start()
 		self.view.show_station(station_name, url)

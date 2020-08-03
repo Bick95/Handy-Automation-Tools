@@ -1,3 +1,4 @@
+import os
 import vlc
 import time
 
@@ -7,7 +8,7 @@ from helper import load_json, save_json
 
 class LiveStream:
 
-	def __init__(self, database='./data/database.js'):
+	def __init__(self, database=os.path.sep.join(['.', 'data', 'database.js'])):
 
 		self.view = View()
 		self.state = 0  # 0: Radio off, 1: Radio on
@@ -89,9 +90,40 @@ class LiveStream:
 		self.view.show_vol(self.settings['vol'])
 
 
-	def add_station(self, query_term):
-		# TODO
+	def add_station_manually(self):
+		redo = True
+		while redo:
+			redo = False
+
+			self.show('Add name: ')
+			name = input()
+
+			self.show('Add URL: ')
+			url = input()
+
+			self.show('Confirm: Name: ' + name + ' URL: ' + url + 'Enter \'Ok\' or \'redo\'.\n')
+			command = input()
+			if command.lower() == 'ok':
+				self.settings['stations'].add(name)
+				self.settings['urls'].add(url)
+				self.show('Added.')
+			else:
+				redo = True
+
+
+	def search_and_add_station(self):
 		self.show('Not yet implemented...')
+
+
+	def add_station(self):
+		self.show('Enter \'add_manually\' or \'search_station\': ')
+		command = input()
+		print(command)
+
+		if command == 'add_manually':
+			self.add_station_manually()
+		else:
+			self.search_and_add_station()
 
 
 	def remove_station(self):
@@ -106,7 +138,7 @@ class LiveStream:
 
 		except Exception as e:
 			self.show('Aborted with error message:\n', e)
-			
+
 
 	def station_up(self):
 		current_id = self.settings['current_station_id']

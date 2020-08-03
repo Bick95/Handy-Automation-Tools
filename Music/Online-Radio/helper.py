@@ -17,12 +17,12 @@ def load_json(path, model):
 def clean_path(path):
 	# In case path contains file name, 
 	# remove it and return remaining path
-	separator = '/'
+	separator = os.path.sep # '/' for Linux, '\\' for Windows
 	parts = path.split(separator) # TODO: make system independent
 	if '.' in parts[-1]:
 		path = separator.join(parts[:-1])
 	return path
-	
+
 
 def save_json(path, data, model):
 	folder = clean_path(path)

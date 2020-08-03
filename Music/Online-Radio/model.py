@@ -32,7 +32,7 @@ class LiveStream:
 
 		self.settings = load_json(database, self)
 
-		self.set_station(self.settings['urls'][self.settings['current_station_id']])
+		self._set_station(self.settings['urls'][self.settings['current_station_id']])
 		self.player.audio_set_volume(self.settings['vol'])
 
 		# Define possible action commands (how to use stream)

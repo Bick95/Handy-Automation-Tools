@@ -35,26 +35,23 @@ class LiveStream:
 		self.set_station(self.settings['urls'][self.settings['current_station_id']])
 		self.player.audio_set_volume(self.settings['vol'])
 
+		# Define possible action commands (how to use stream)
+		self.commands = {
+			'start': 		self.start,
+			'stop':  		self.stop,
+			'station_up': 	self.station_up,
+			'station_down':	self.station_down,
+			'vol_up':		self.vol_up,
+			'vol_down':		self.vol_down,
+			'close':		self.close,
+		}
+
 		self.show('Player instentiated.')
 
 
 	def show_options(self):
-		text = '\nOptions: You may enter any command after a colon.' + '\n\n'
+		self.view.show_options(self)
 
-		text += 'Start: \t\tstart' + '\n'
-		text += 'Stop: \t\tstop' + '\n'
-
-		text += 'Volume up: \tvol_up' + '\n'
-		text += 'Volume down: \tvol_down' + '\n'
-
-		text += 'Station up: \tstation_up' + '\n'
-		text += 'Station down: \tstation_down' + '\n'
-
-		text += 'Close radio: \tclose' + '\n'
-
-		text += '\nEnd.' + '\n'
-		self.show(text)
-		
 
 	def set_station(self, url):
 		# Define VLC media
@@ -81,17 +78,21 @@ class LiveStream:
 	def vol_up(self):
 		self.settings['vol'] += self.VOL_CHANGE
 		self.player.audio_set_volume(self.settings['vol'])
-		self.show('Volume:', self.settings['vol'])
+		self.view.show_vol(self.settings['vol'])
 
 
 	def vol_down(self):
 		self.settings['vol'] -= self.VOL_CHANGE
 		self.player.audio_set_volume(self.settings['vol'])
-		self.show('Volume:', self.settings['vol'])
+		self.view.show_vol(self.settings['vol'])
 
 
 	def add_station(self, query_term):
+		# TODO
 		self.show('Not yet implemented...')
+
+	def remove_station(self):
+		pass
 
 
 	def station_up(self):
@@ -104,12 +105,12 @@ class LiveStream:
 		else:
 			self.settings['current_station_id'] = next_id
 		
-		station = self.settings['urls'][self.settings['current_station_id']]
+		url = self.settings['urls'][self.settings['current_station_id']]
 		station_name = self.settings['stations'][self.settings['current_station_id']]
-		self.set_station(station)
+		self.set_station(url)
 		if self.state:
 			self.start()
-		self.show('station:', station_name, ',', station)
+		self.view.show_station(station_name, url)
 
 
 	def station_down(self):
@@ -122,12 +123,12 @@ class LiveStream:
 		else:
 			self.settings['current_station_id'] = next_id
 		
-		station = self.settings['urls'][self.settings['current_station_id']]
+		url = self.settings['urls'][self.settings['current_station_id']]
 		station_name = self.settings['stations'][self.settings['current_station_id']]
-		self.set_station(station)
+		self.set_station(url)
 		if self.state:
 			self.start()
-		self.show('station:', station_name, ',', station)
+		self.view.show_station(station_name, url)
 
 
 	def	close(self):

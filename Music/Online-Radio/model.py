@@ -54,6 +54,7 @@ class LiveStream:
 
 		text += '\nEnd.' + '\n'
 		self.show(text)
+		
 
 	def set_station(self, url):
 		# Define VLC media

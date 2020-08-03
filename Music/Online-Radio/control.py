@@ -29,6 +29,7 @@ def terminal_control(stream):
 		command = input()
 
 		execute(stream, command)
+		
 
 def GPIO_control():
 	pass

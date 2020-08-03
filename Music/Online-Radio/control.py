@@ -2,10 +2,11 @@
 import vlc
 import time
 
-url = 'http://prem1.rockradio.com:80/bluesrock?9555ae7caa92404c73cade1d'
+url = 'http://rhh.streamabc.net/rhh-rhhlivestream-mp3-192-5434905'
+#url = 'https://stream.antenne1.de/a1stg/livestream2.mp3'
 
 #define VLC instance
-instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
+instance = vlc.Instance('--quiet') #'--input-repeat=-1', '--fullscreen'
 
 #Define VLC player
 player=instance.media_player_new()
@@ -18,3 +19,5 @@ player.set_media(media)
 
 #Play the media
 player.play()
+time.sleep(9)
+player.stop()

@@ -87,11 +87,11 @@ class LiveStream:
 
 	def vol_up(self):
 		self.settings['vol'] += self.VOL_CHANGE
-		player.audio_set_volume(self.settings['vol'])
+		self.player.audio_set_volume(self.settings['vol'])
 
 	def vold_down(self):
 		self.settings['vol'] -= self.VOL_CHANGE
-		player.audio_set_volume(self.settings['vol'])
+		self.player.audio_set_volume(self.settings['vol'])
 
 	def add_station(self, query_term):
 		pass

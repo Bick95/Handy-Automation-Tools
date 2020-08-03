@@ -16,7 +16,7 @@ class LiveStream:
 								  'https://stream.antenne1.de/a1stg/livestream2.mp3'],
 						 'stations': ['Radio Hamburg', 'Antenne 1'],
 						 'vol': 20,
-						 'current_channel_id': 0,
+						 'current_station_id': 0,
 						 }
 
 		# Define VLC instance
@@ -31,7 +31,7 @@ class LiveStream:
 
 		self.settings = load_json(database, self)
 
-		self.set_channel(self.settings['urls'][self.settings['current_channel_id']])
+		self.set_station(self.settings['urls'][self.settings['current_station_id']])
 		self.player.audio_set_volume(self.settings['vol'])
 
 		self.show('Player instentiated.')
@@ -47,10 +47,13 @@ class LiveStream:
 
 		text += 'Station up: \tstation_up' + '\n'
 		text += 'Station down: \tstation_down' + '\n'
+
+		text += 'Close radio: \tclose' + '\n'
+		
 		text += '\nEnd.' + '\n'
 		self.show(text)
 
-	def set_channel(self, url):
+	def set_station(self, url):
 		# Define VLC media
 		media = self.instance.media_new(url)
 		
@@ -86,36 +89,36 @@ class LiveStream:
 		self.show('Not yet implemented...')
 
 
-	def channel_up(self):
-		current_id = self.settings['current_channel_id']
+	def station_up(self):
+		current_id = self.settings['current_station_id']
 		next_id = current_id + 1
-		num_channels = len(self.settings['urls'])
+		num_stations = len(self.settings['urls'])
 
-		if next_id >= num_channels:
-			self.settings['current_channel_id'] = 0
+		if next_id >= num_stations:
+			self.settings['current_station_id'] = 0
 		else:
-			self.settings['current_channel_id'] = next_id
+			self.settings['current_station_id'] = next_id
 		
-		channel = self.settings['urls'][self.settings['current_channel_id']]
-		channel_name = self.settings['stations'][self.settings['current_channel_id']]
-		self.set_channel(channel)
-		self.show('Channel:', channel_name, ',', channel)
+		station = self.settings['urls'][self.settings['current_station_id']]
+		station_name = self.settings['stations'][self.settings['current_station_id']]
+		self.set_station(station)
+		self.show('station:', station_name, ',', station)
 
 
-	def channel_down(self):
-		current_id = self.settings['current_channel_id']
+	def station_down(self):
+		current_id = self.settings['current_station_id']
 		next_id = current_id - 1
-		last_channel = len(self.settings['urls']) - 1
+		last_station = len(self.settings['urls']) - 1
 
 		if next_id < 0:
-			self.settings['current_channel_id'] = last_channel
+			self.settings['current_station_id'] = last_station
 		else:
-			self.settings['current_channel_id'] = next_id
+			self.settings['current_station_id'] = next_id
 		
-		channel = self.settings['urls'][self.settings['current_channel_id']]
-		channel_name = self.settings['stations'][self.settings['current_channel_id']]
-		self.set_channel(channel)
-		self.show('Channel:', channel_name, ',', channel)
+		station = self.settings['urls'][self.settings['current_station_id']]
+		station_name = self.settings['stations'][self.settings['current_station_id']]
+		self.set_station(station)
+		self.show('station:', station_name, ',', station)
 
 
 	def	close(self):

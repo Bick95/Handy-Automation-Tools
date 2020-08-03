@@ -2,49 +2,52 @@ import time
 from model import LiveStream
 
 
-stream = LiveStream()
+def execute(stream, command):
+	switch(command){
+		case 'start':
+			stream.start()
+			break
+		case 'stop':
+			stream.stop()
+			break
+		case 'station_up':
+			stream.station_up()
+			break
+		case 'station_down':
+			stream.station_down()
+			break
+		case 'vol_up':
+			stream.vol_up()
+			break
+		case 'vol_down':
+			stream.vol_down()
+			break
+		case 'close':
+			stream.close()
+			break
+		default:
+		       stream.show('Invalid command.')
+   }
+
+def terminal_control(stream):
+
+	stream.show_options()
+
+	command = ''
+
+	while not command is 'close':
+		stream.show_options()
+		command = input()
+
+		execute(stream, command)
+
+def GPIO_control():
+	pass
 
 
-#def terminal_control():
+def main():
+	stream = LiveStream()
+	terminal_control(stream)
 
-stream.show_options()
-
-stream.start()
-
-time.sleep(2)
-
-stream.stop()
-
-time.sleep(2)
-
-stream.start()
-
-time.sleep(2)
-
-stream.channel_up()
-
-time.sleep(2)
-
-stream.stop()
-
-stream.channel_up()
-
-time.sleep(2)
-
-stream.start()
-
-time.sleep(2)
-
-stream.vol_up()
-
-time.sleep(2)
-
-stream.vol_down()
-
-time.sleep(2)
-
-stream.close()
-
-#def GPIO_control():
-#	pass
-
+if __name__ == '__main__':
+	main()

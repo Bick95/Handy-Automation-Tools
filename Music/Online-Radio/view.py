@@ -31,6 +31,12 @@ class View:
 	def show_vol(self, vol):
 		print('Volume:', vol)
 
+
 	def show_station(self, station, url):
 		print('station:', station, ',', url)
+
+
+	def show_station_list(self, station_names, urls):
+		for i in range(len(station_names)):
+			print('[' + str(i) + '] ', station_names[i], ', ', urls[i])
 

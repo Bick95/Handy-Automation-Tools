@@ -37,13 +37,15 @@ class LiveStream:
 
 		# Define possible action commands (how to use stream)
 		self.commands = {
-			'start': 		self.start,
-			'stop':  		self.stop,
-			'station_up': 	self.station_up,
-			'station_down':	self.station_down,
-			'vol_up':		self.vol_up,
-			'vol_down':		self.vol_down,
-			'close':		self.close,
+			'start': 			elf.start,
+			'stop':  			self.stop
+			'add_station':  	self.add_station,
+			'remove_station':	self.remove_station
+			'station_up': 		self.station_up,
+			'station_down':		self.station_down,
+			'vol_up':			self.vol_up,
+			'vol_down':			self.vol_down,
+			'close':			self.close,
 		}
 
 		self.show('Player instentiated.')
@@ -91,8 +93,10 @@ class LiveStream:
 		# TODO
 		self.show('Not yet implemented...')
 
+
 	def remove_station(self):
-		pass
+		self.view.show_station_list(self.settings['stations'], self.settings['urls'])
+		# TODO
 
 
 	def station_up(self):

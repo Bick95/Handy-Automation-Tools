@@ -12,18 +12,11 @@ class View:
 	def show_options(self, stream):
 		text = '\nOptions: You may enter any command after a colon.' + '\n\n'
 
-		text += 'Start: \t\tstart' + '\n'
-		text += 'Stop: \t\tstop' + '\n'
+		for option in stream.commands.keys():
+			command = (option[0].upper()+option[1:]).replace('_', ' ')
+			text += command + ':' + '\t' + ('\t' if len(command) < 8 else '') + option + '\n'
 
-		text += 'Volume up: \tvol_up' + '\n'
-		text += 'Volume down: \tvol_down' + '\n'
-
-		text += 'Station up: \tstation_up' + '\n'
-		text += 'Station down: \tstation_down' + '\n'
-
-		text += 'Close radio: \tclose' + '\n'
-
-		text += '\nEnd.' + '\n'
+		text += '\nEnd options.' + '\n'
 
 		print(text)
 
@@ -38,5 +31,5 @@ class View:
 
 	def show_station_list(self, station_names, urls):
 		for i in range(len(station_names)):
-			print('[' + str(i) + '] ', station_names[i], ', ', urls[i])
+			print('[' + str(i) + ']\t', station_names[i] + ',\t' + urls[i])
 

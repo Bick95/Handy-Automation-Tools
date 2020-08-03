@@ -37,10 +37,10 @@ class LiveStream:
 
 		# Define possible action commands (how to use stream)
 		self.commands = {
-			'start': 			elf.start,
-			'stop':  			self.stop
+			'start': 			self.start,
+			'stop':  			self.stop,
 			'add_station':  	self.add_station,
-			'remove_station':	self.remove_station
+			'remove_station':	self.remove_station,
 			'station_up': 		self.station_up,
 			'station_down':		self.station_down,
 			'vol_up':			self.vol_up,
@@ -95,9 +95,18 @@ class LiveStream:
 
 
 	def remove_station(self):
+		self.view.show('Type index of station to be removed and hit enter.\n Hit enter only for cancelling.')
 		self.view.show_station_list(self.settings['stations'], self.settings['urls'])
-		# TODO
+		idx = input()
+		try:
+			idx = int(idx)
+			del self.settings['stations'][idx]
+			del self.settings['urls'][idx]
+			self.show('Removed station.\n')
 
+		except Exception as e:
+			self.show('Aborted with error message:\n', e)
+			
 
 	def station_up(self):
 		current_id = self.settings['current_station_id']

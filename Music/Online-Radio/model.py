@@ -36,6 +36,19 @@ class LiveStream:
 
 		self.show('Player instentiated.')
 
+	def show_options(self):
+		text = '\nOptions: You may enter any command after a colon.' + '\n\n'
+
+		text += 'Start: \t\tstart' + '\n'
+		text += 'Stop: \t\tstop' + '\n'
+
+		text += 'Volume up: \tvol_up' + '\n'
+		text += 'Volume down: \tvol_down' + '\n'
+
+		text += 'Station up: \tstation_up' + '\n'
+		text += 'Station down: \tstation_down' + '\n'
+		text += '\nEnd.' + '\n'
+		self.show(text)
 
 	def set_channel(self, url):
 		# Define VLC media
@@ -63,7 +76,7 @@ class LiveStream:
 		self.show('Volume:', self.settings['vol'])
 
 
-	def vold_down(self):
+	def vol_down(self):
 		self.settings['vol'] -= self.VOL_CHANGE
 		self.player.audio_set_volume(self.settings['vol'])
 		self.show('Volume:', self.settings['vol'])

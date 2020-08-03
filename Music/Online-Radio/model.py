@@ -10,6 +10,7 @@ class LiveStream:
 	def __init__(self, database='./data/database.js'):
 
 		self.view = View()
+		self.state = 0  # 0: Radio off, 1: Radio on
 
 		# Set defaults
 		self.settings = {'urls': ['http://rhh.streamabc.net/rhh-rhhlivestream-mp3-192-5434905',
@@ -65,12 +66,14 @@ class LiveStream:
 	def start(self):
 		# Play the media
 		self.player.play()
+		self.state = 1
 		self.show('Player started.')
 
 
 	def stop(self):
 		# Play the media
 		self.player.stop()
+		self.state = 0
 		self.show('Player stopped.')
 
 
@@ -103,6 +106,8 @@ class LiveStream:
 		station = self.settings['urls'][self.settings['current_station_id']]
 		station_name = self.settings['stations'][self.settings['current_station_id']]
 		self.set_station(station)
+		if self.state:
+			self.start()
 		self.show('station:', station_name, ',', station)
 
 
@@ -119,6 +124,8 @@ class LiveStream:
 		station = self.settings['urls'][self.settings['current_station_id']]
 		station_name = self.settings['stations'][self.settings['current_station_id']]
 		self.set_station(station)
+		if self.state:
+			self.start()
 		self.show('station:', station_name, ',', station)
 
 
@@ -126,7 +133,7 @@ class LiveStream:
 		self.player.stop()
 		save_json('./data/database.js', self.settings, self)
 		self.show('Bye Bye!')
-		
+
 
 	def show(self, *text):
 		text = [str(t) for t in text]  # Transform everything to text

@@ -22,21 +22,21 @@ import time
 #time.sleep(9)
 #player.stop()
 
-class LiveStream():
+class LiveStream:
 
-	def __init(database='./data/database.js')__:
+	def __init__(self, database='./data/database.js'):
 
 		# Set defaults
-		self.settings = {'urls'=['http://rhh.streamabc.net/rhh-rhhlivestream-mp3-192-5434905'],
-						 'vol'=20,
-						 'current_channel_id'=0,
+		self.settings = {'urls': ['http://rhh.streamabc.net/rhh-rhhlivestream-mp3-192-5434905'],
+						 'vol': 20,
+						 'current_channel_id': 0,
 						 }
 
 		# Define VLC instance
 		self.instance = vlc.Instance('--quiet') #'--input-repeat=-1', '--fullscreen'
 
 		# Define VLC player
-		self.player = instance.media_player_new()
+		self.player = self.instance.media_player_new()
 
 		self.VOL_MIN = 0
 		self.VOL_MAX = 100
@@ -70,33 +70,35 @@ class LiveStream():
 		self.player.stop()
 
 
-	def set_channel(url):
+	def set_channel(self, url):
 		# Define VLC media
 		media = self.instance.media_new(url)
 		
 		# Set player media
 		self.player.set_media(media)
 
-	def start_stream():
+	def start_stream(self):
 		# Play the media
 		self.player.play()
 
-	def stop_stream():
+	def stop_stream(self):
 		# Play the media
 		self.player.stop()
 
-	def vol_up():
+	def vol_up(self):
 		self.settings['vol'] += self.VOL_CHANGE
 		player.audio_set_volume(self.settings['vol'])
 
-	def vold_down():
+	def vold_down(self):
 		self.settings['vol'] -= self.VOL_CHANGE
 		player.audio_set_volume(self.settings['vol'])
 
-	def add_station(query_term):
+	def add_station(self, query_term):
 		pass
 
-	def	close():
+	def	close(self):
 		self.player.stop()
 		with open('./data/database.js', 'w') as f:
-    		json.dump(team, f)
+			json.dump(team, f)
+
+LiveStream()

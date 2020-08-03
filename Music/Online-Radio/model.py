@@ -101,11 +101,11 @@ class LiveStream:
 			self.show('Add URL: ')
 			url = input()
 
-			self.show('Confirm: Name: ' + name + ' URL: ' + url + 'Enter \'Ok\' or \'redo\'.\n')
+			self.show('Confirm: Name: ' + name + ' URL: ' + url + '\nEnter \'Ok\' or \'redo\'.\n')
 			command = input()
 			if command.lower() == 'ok':
-				self.settings['stations'].add(name)
-				self.settings['urls'].add(url)
+				self.settings['stations'].append(name)
+				self.settings['urls'].append(url)
 				self.show('Added.')
 			else:
 				redo = True

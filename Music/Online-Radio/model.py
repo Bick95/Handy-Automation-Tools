@@ -36,6 +36,7 @@ class LiveStream:
 
 		self.show('Player instentiated.')
 
+
 	def show_options(self):
 		text = '\nOptions: You may enter any command after a colon.' + '\n\n'
 
@@ -49,7 +50,7 @@ class LiveStream:
 		text += 'Station down: \tstation_down' + '\n'
 
 		text += 'Close radio: \tclose' + '\n'
-		
+
 		text += '\nEnd.' + '\n'
 		self.show(text)
 
@@ -125,6 +126,7 @@ class LiveStream:
 		self.player.stop()
 		save_json('./data/database.js', self.settings, self)
 		self.show('Bye Bye!')
+		
 
 	def show(self, *text):
 		text = [str(t) for t in text]  # Transform everything to text

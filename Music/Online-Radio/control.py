@@ -3,31 +3,20 @@ from model import LiveStream
 
 
 def execute(stream, command):
-	switch(command){
-		case 'start':
-			stream.start()
-			break
-		case 'stop':
-			stream.stop()
-			break
-		case 'station_up':
-			stream.station_up()
-			break
-		case 'station_down':
-			stream.station_down()
-			break
-		case 'vol_up':
-			stream.vol_up()
-			break
-		case 'vol_down':
-			stream.vol_down()
-			break
-		case 'close':
-			stream.close()
-			break
-		default:
-		       stream.show('Invalid command.')
-   }
+	switch = {
+		'start': 		stream.start,
+		'stop':  		stream.stop,
+		'station_up': 	stream.station_up,
+		'station_down':	stream.station_down,
+		'vol_up':		stream.vol_up,
+		'vol_down':		stream.vol_down,
+		'close':		stream.close,
+	}
+	if command in switch:
+		switch[command]()
+	else:
+		stream.show('Invalid command.')
+
 
 def terminal_control(stream):
 
@@ -35,7 +24,7 @@ def terminal_control(stream):
 
 	command = ''
 
-	while not command is 'close':
+	while command != 'close':
 		stream.show_options()
 		command = input()
 

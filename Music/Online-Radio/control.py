@@ -1,4 +1,3 @@
-import time
 from model import LiveStream
 from gpio_controller import GPIOController
 
@@ -34,6 +33,7 @@ def main():
 	stream = LiveStream()
 	#terminal_control(stream)
 	GPIO_control(stream)
+
 
 if __name__ == '__main__':
 	main()

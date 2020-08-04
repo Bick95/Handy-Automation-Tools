@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 
 
 class GPIOController:
+
     def __init__(self,
                  on_off_action,
                  vol_up_action,
@@ -17,22 +18,28 @@ class GPIOController:
         INITIAL_VAL = GPIO.LOW
         CURRENT_VAL = GPIO.LOW
 
-        # LED GPIO Pins - Init
-        # Channel -
+
+        # Indicative LED GPIO Pins - Init
+        # Station -
         GPIO.setup(18, GPIO.OUT, initial=INITIAL_VAL)  # Set pin as output
         GPIO.output(18, CURRENT_VAL)
 
+        # Station up
         GPIO.setup(23, GPIO.OUT, initial=INITIAL_VAL)  # Set pin as output
         GPIO.output(23, CURRENT_VAL)
 
+        # Vol -
         GPIO.setup(24, GPIO.OUT, initial=INITIAL_VAL)  # Set pin as output
         GPIO.output(24, CURRENT_VAL)
 
+        # Vol +
         GPIO.setup(25, GPIO.OUT, initial=INITIAL_VAL)  # Set pin as output
         GPIO.output(25, CURRENT_VAL)
 
+        # On/Off
         GPIO.setup(12, GPIO.OUT, initial=INITIAL_VAL)  # Set pin as output
         GPIO.output(12, CURRENT_VAL)
+
 
         # Switch GPIO Pins - Init
 

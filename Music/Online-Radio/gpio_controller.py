@@ -1,8 +1,5 @@
 import RPi.GPIO as GPIO
 
-def dummy_functn():
-    print('Hello World!')
-
 
 class GPIOController:
     def __init__(self,
@@ -44,12 +41,12 @@ class GPIOController:
 
         GPIO.add_event_detect(26, GPIO.BOTH) # Which switch's action-event to detect - RISING, FALLING or BOTH
 
-        def callback_vol_up(x):
+        def callback_on_off(x):
             GPIO.output(12, GPIO.input(26))
             print('On/Off!', x)
-            vol_down_action()
+            on_off_action()
 
-        GPIO.add_event_callback(26, callback_vol_up)
+        GPIO.add_event_callback(26, callback_on_off)
         
         
         # Vol +
@@ -60,7 +57,7 @@ class GPIOController:
         def callback_vol_up(x):
             GPIO.output(25, GPIO.input(13))
             print('Vol up!', x)
-            vol_down_action()
+            vol_up_action()
 
         GPIO.add_event_callback(13, callback_vol_up)
         
@@ -78,7 +75,7 @@ class GPIOController:
         GPIO.add_event_callback(22, callback_vol_down)
 
 
-        # Channel +
+        # Station +
         GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
         GPIO.add_event_detect(27, GPIO.BOTH) # Which switch's action-event to detect - RISING, FALLING or BOTH
@@ -86,12 +83,12 @@ class GPIOController:
         def callback_station_up(x):
             GPIO.output(23, GPIO.input(27))
             print('Station up!', x)
-            vol_down_action()
+            station_up_action()
 
         GPIO.add_event_callback(27, callback_station_up)
 
 
-        # Channel -
+        # Station -
         GPIO.setup(4, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
         GPIO.add_event_detect(4, GPIO.BOTH) # Which switch's action-event to detect - RISING, FALLING or BOTH
@@ -99,8 +96,6 @@ class GPIOController:
         def callback_station_down(x):
             GPIO.output(18, GPIO.input(4))
             print('Station down!', x)
-            vol_down_action()
+            station_down_action()
 
         GPIO.add_event_callback(4, callback_station_down)
-
-GPIOController(dummy_functn, dummy_functn, dummy_functn, dummy_functn, dummy_functn)

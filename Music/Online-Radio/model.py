@@ -64,6 +64,13 @@ class LiveStream:
 		self.player.set_media(media)
 		
 
+	def alternate_start_stop(self):
+		if self.state:
+			self.stop()
+		else: 
+			self.start()
+
+
 	def start(self):
 		# Play the media
 		self.player.play()

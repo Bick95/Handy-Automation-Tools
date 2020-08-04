@@ -1,5 +1,6 @@
 import time
 from model import LiveStream
+from gpio_controller import GPIOController
 
 
 def execute(stream, command):
@@ -20,13 +21,19 @@ def terminal_control(stream):
 		execute(stream, command)
 
 
-def GPIO_control():
-	pass
+def GPIO_control(stream):
+	controller = GPIOController(stream.alternate_start_stop,
+								stream.vol_up
+								stream.vol_down
+								stream.statiion_up
+								stream.station_down
+								)
 
 
 def main():
 	stream = LiveStream()
-	terminal_control(stream)
+	#terminal_control(stream)
+	GPIO_control(stream)
 
 if __name__ == '__main__':
 	main()

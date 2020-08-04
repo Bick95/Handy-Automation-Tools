@@ -3,24 +3,13 @@ from model import LiveStream
 
 
 def execute(stream, command):
-	switch = {
-		'start': 		stream.start,
-		'stop':  		stream.stop,
-		'station_up': 	stream.station_up,
-		'station_down':	stream.station_down,
-		'vol_up':		stream.vol_up,
-		'vol_down':		stream.vol_down,
-		'close':		stream.close,
-	}
-	if command in switch:
-		switch[command]()
+	if command in stream.commands:
+		stream.commands[command]()
 	else:
 		stream.show('Invalid command.')
 
 
 def terminal_control(stream):
-
-	stream.show_options()
 
 	command = ''
 
@@ -29,6 +18,7 @@ def terminal_control(stream):
 		command = input()
 
 		execute(stream, command)
+
 
 def GPIO_control():
 	pass

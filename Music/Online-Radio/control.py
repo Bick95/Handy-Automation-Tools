@@ -23,10 +23,10 @@ def terminal_control(stream):
 
 def GPIO_control(stream):
 	controller = GPIOController(stream.alternate_start_stop,
-								stream.vol_up
-								stream.vol_down
-								stream.statiion_up
-								stream.station_down
+								stream.vol_up,
+								stream.vol_down,
+								stream.station_up,
+								stream.station_down,
 								)
 
 

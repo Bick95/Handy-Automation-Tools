@@ -4,11 +4,12 @@ import time
 
 from view import View
 from helper import load_json, save_json
+from web_scraper import WebScraper
 
 
 class LiveStream:
 
-	def __init__(self, database=os.path.sep.join(['.', 'data', 'database.js'])):
+	def __init__(self, database=os.path.sep.join(['.', 'data', 'database.json'])):
 
 		self.view = View()
 		self.state = 0  # 0: Radio off, 1: Radio on
@@ -119,7 +120,21 @@ class LiveStream:
 
 
 	def search_and_add_station(self):
-		self.show('Not yet implemented...')
+		scraper = WebScraper(self)
+		redo = True
+		while redo:
+			redo = False
+
+			name, url = scraper.get_stream_url()
+
+			self.show('Confirm: Name: ' + name + ' URL: ' + url + '\nEnter \'Ok\' or \'redo\'.\n')
+			command = input()
+			if command.lower() == 'ok':
+				self.settings['stations'].append(name)
+				self.settings['urls'].append(url)
+				self.show('Added.')
+			else:
+				redo = True
 
 
 	def add_station(self):
@@ -185,7 +200,7 @@ class LiveStream:
 
 	def	close(self):
 		self.player.stop()
-		save_json('./data/database.js', self.settings, self)
+		save_json('./data/database.json', self.settings, self)
 		self.show('Bye Bye!')
 
 

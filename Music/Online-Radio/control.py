@@ -1,6 +1,10 @@
 from model import LiveStream
-from gpio_controller import GPIOController
 
+try:
+	from gpio_controller import GPIOController
+
+except Exception:
+	print('GPIO not available')
 
 def execute(stream, command):
 	if command in stream.commands:
@@ -31,8 +35,8 @@ def GPIO_control(stream):
 
 def main():
 	stream = LiveStream()
-	#terminal_control(stream)
-	GPIO_control(stream)
+	terminal_control(stream)
+	#GPIO_control(stream)
 
 
 if __name__ == '__main__':

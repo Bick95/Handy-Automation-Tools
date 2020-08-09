@@ -9,201 +9,213 @@ from web_scraper import WebScraper
 
 class LiveStream:
 
-	def __init__(self, database=os.path.sep.join(['.', 'data', 'database.json'])):
+    def __init__(self, database=None):
 
-		self.view = View()
-		self.state = 0  # 0: Radio off, 1: Radio on
+        self.view = View()
+        self.state = 0  # 0: Radio off, 1: Radio on
 
-		# Set defaults
-		self.settings = {'urls': ['http://rhh.streamabc.net/rhh-rhhlivestream-mp3-192-5434905',
-								  'https://stream.antenne1.de/a1stg/livestream2.mp3'],
-						 'stations': ['Radio Hamburg', 'Antenne 1'],
-						 'vol': 20,
-						 'current_station_id': 0,
-						 }
+        # Set defaults
+        self.settings = {'urls': ['http://rhh.streamabc.net/rhh-rhhlivestream-mp3-192-5434905',
+                                  'https://stream.antenne1.de/a1stg/livestream2.mp3'],
+                         'stations': ['Radio Hamburg', 'Antenne 1'],
+                         'vol': 20,
+                         'current_station_id': 0,
+                         }
 
-		# Define VLC instance
-		self.instance = vlc.Instance('--quiet') #'--input-repeat=-1', '--fullscreen'
+        # Define VLC instance
+        self.instance = vlc.Instance('--quiet') #'--input-repeat=-1', '--fullscreen'
 
-		# Define VLC player
-		self.player = self.instance.media_player_new()
+        # Define VLC player
+        self.player = self.instance.media_player_new()
 
-		self.VOL_MIN = 0
-		self.VOL_MAX = 100
-		self.VOL_CHANGE = 5
+        self.VOL_MIN = 0
+        self.VOL_MAX = 100
+        self.VOL_CHANGE = 5
+        
+        if database is None:
+            self.file_location = os.path.dirname(os.path.realpath(__file__))
+            self.database_loc = self.file_location + '/' + os.path.sep.join(['.', 'data', 'database.json'])
+        else:
+            self.database_loc = database
+            
+        self.settings = load_json(self.database_loc, self)
 
-		self.settings = load_json(database, self)
+        self._set_station(self.settings['urls'][self.settings['current_station_id']])
+        self.player.audio_set_volume(self.settings['vol'])
 
-		self._set_station(self.settings['urls'][self.settings['current_station_id']])
-		self.player.audio_set_volume(self.settings['vol'])
-
-		# Define possible action commands (how to use stream)
-		self.commands = {
-			'start': 			self.start,
-			'stop':  			self.stop,
-			'add_station':  	self.add_station,
-			'remove_station':	self.remove_station,
-			'station_up': 		self.station_up,
-			'station_down':		self.station_down,
-			'vol_up':			self.vol_up,
-			'vol_down':			self.vol_down,
-			'close':			self.close,
-		}
-
-		self.show('Player instentiated.')
-
-
-	def show_options(self):
-		self.view.show_options(self)
-
-
-	def _set_station(self, url):
-		# Define VLC media
-		media = self.instance.media_new(url)
-		
-		# Set player media
-		self.player.set_media(media)
-		
-
-	def alternate_start_stop(self):
-		if self.state:
-			self.stop()
-		else: 
-			self.start()
+        # Define possible action commands (how to use stream)
+        self.commands = {
+            'start':            self.start,
+            'stop':             self.stop,
+            'add_station':      self.add_station,
+            'remove_station':   self.remove_station,
+            'station_up':       self.station_up,
+            'station_down':     self.station_down,
+            'vol_up':           self.vol_up,
+            'vol_down':         self.vol_down,
+            'close':            self.close,
+        }
+            
+        self.show('Player instentiated.')
 
 
-	def start(self):
-		# Play the media
-		self.player.play()
-		self.state = 1
-		self.show('Player started.')
+    def show_options(self):
+        self.view.show_options(self)
 
 
-	def stop(self):
-		# Play the media
-		self.player.stop()
-		self.state = 0
-		self.show('Player stopped.')
+    def _set_station(self, url):
+        # Define VLC media
+        media = self.instance.media_new(url)
+        
+        # Set player media
+        self.player.set_media(media)
+        
+
+    def alternate_start_stop(self):
+        if self.state:
+            self.stop()
+        else: 
+            self.start()
 
 
-	def vol_up(self):
-		self.settings['vol'] += self.VOL_CHANGE
-		self.player.audio_set_volume(self.settings['vol'])
-		self.view.show_vol(self.settings['vol'])
+    def start(self):
+        # Play the media
+        self.player.play()
+        self.state = 1
+        self.show('Player started.')
 
 
-	def vol_down(self):
-		self.settings['vol'] -= self.VOL_CHANGE
-		self.player.audio_set_volume(self.settings['vol'])
-		self.view.show_vol(self.settings['vol'])
+    def stop(self):
+        # Play the media
+        self.player.stop()
+        self.state = 0
+        self.save()
+        self.show('Player stopped.')
 
 
-	def add_station_manually(self):
-		redo = True
-		while redo:
-			redo = False
-
-			self.show('Add name: ')
-			name = input()
-
-			self.show('Add URL: ')
-			url = input()
-
-			self.show('Confirm: Name: ' + name + ' URL: ' + url + '\nEnter \'Ok\' or \'redo\'.\n')
-			command = input()
-			if command.lower() == 'ok':
-				self.settings['stations'].append(name)
-				self.settings['urls'].append(url)
-				self.show('Added.')
-			else:
-				redo = True
+    def vol_up(self):
+        self.settings['vol'] += self.VOL_CHANGE
+        self.player.audio_set_volume(self.settings['vol'])
+        self.view.show_vol(self.settings['vol'])
 
 
-	def search_and_add_station(self):
-		scraper = WebScraper(self)
-		redo = True
-		while redo:
-			redo = False
-
-			name, url = scraper.get_stream_url()
-
-			self.show('Confirm: Name: ' + name + ' URL: ' + url + '\nEnter \'Ok\' or \'redo\'.\n')
-			command = input()
-			if command.lower() == 'ok':
-				self.settings['stations'].append(name)
-				self.settings['urls'].append(url)
-				self.show('Added.')
-			else:
-				redo = True
+    def vol_down(self):
+        self.settings['vol'] -= self.VOL_CHANGE
+        self.player.audio_set_volume(self.settings['vol'])
+        self.view.show_vol(self.settings['vol'])
 
 
-	def add_station(self):
-		self.show('Enter \'add_manually\' or \'search_station\': ')
-		command = input()
-		print(command)
+    def add_station_manually(self):
+        redo = True
+        while redo:
+            redo = False
 
-		if command == 'add_manually':
-			self.add_station_manually()
-		else:
-			self.search_and_add_station()
+            self.show('Add name: ')
+            name = input()
 
+            self.show('Add URL: ')
+            url = input()
 
-	def remove_station(self):
-		self.view.show('Type index of station to be removed and hit enter.\n Hit enter only for cancelling.')
-		self.view.show_station_list(self.settings['stations'], self.settings['urls'])
-		idx = input()
-		try:
-			idx = int(idx)
-			del self.settings['stations'][idx]
-			del self.settings['urls'][idx]
-			self.show('Removed station.\n')
-
-		except Exception as e:
-			self.show('Aborted with error message:\n', e)
+            self.show('Confirm: Name: ' + name + ' URL: ' + url + '\nEnter \'Ok\' or \'redo\'.\n')
+            command = input()
+            if command.lower() == 'ok':
+                self.settings['stations'].append(name)
+                self.settings['urls'].append(url)
+                self.show('Added.')
+            else:
+                redo = True
 
 
-	def station_up(self):
-		current_id = self.settings['current_station_id']
-		next_id = current_id + 1
-		num_stations = len(self.settings['urls'])
+    def search_and_add_station(self):
+        scraper = WebScraper(self)
+        redo = True
+        while redo:
+            redo = False
 
-		if next_id >= num_stations:
-			self.settings['current_station_id'] = 0
-		else:
-			self.settings['current_station_id'] = next_id
-		
-		url = self.settings['urls'][self.settings['current_station_id']]
-		station_name = self.settings['stations'][self.settings['current_station_id']]
-		self._set_station(url)
-		if self.state:
-			self.start()
-		self.view.show_station(station_name, url)
+            name, url = scraper.get_stream_url()
 
-
-	def station_down(self):
-		current_id = self.settings['current_station_id']
-		next_id = current_id - 1
-		last_station = len(self.settings['urls']) - 1
-
-		if next_id < 0:
-			self.settings['current_station_id'] = last_station
-		else:
-			self.settings['current_station_id'] = next_id
-		
-		url = self.settings['urls'][self.settings['current_station_id']]
-		station_name = self.settings['stations'][self.settings['current_station_id']]
-		self._set_station(url)
-		if self.state:
-			self.start()
-		self.view.show_station(station_name, url)
+            self.show('Confirm: Name: ' + name + ' URL: ' + url + '\nEnter \'Ok\' or \'redo\'.\n')
+            command = input()
+            if command.lower() == 'ok':
+                self.settings['stations'].append(name)
+                self.settings['urls'].append(url)
+                self.show('Added.')
+            else:
+                redo = True
 
 
-	def	close(self):
-		self.player.stop()
-		save_json('./data/database.json', self.settings, self)
-		self.show('Bye Bye!')
+    def add_station(self):
+        self.show('Enter \'add_manually\' or \'search_station\': ')
+        command = input()
+        print(command)
+
+        if command == 'add_manually':
+            self.add_station_manually()
+        else:
+            self.search_and_add_station()
 
 
-	def show(self, *text):
-		text = [str(t) for t in text]  # Transform everything to text
-		self.view.show(' '.join(text)) # Show text
+    def remove_station(self):
+        self.view.show('Type index of station to be removed and hit enter.\n Hit enter only for cancelling.')
+        self.view.show_station_list(self.settings['stations'], self.settings['urls'])
+        idx = input()
+        try:
+            idx = int(idx)
+            del self.settings['stations'][idx]
+            del self.settings['urls'][idx]
+            self.show('Removed station.\n')
+
+        except Exception as e:
+            self.show('Aborted with error message:\n', e)
+
+
+    def station_up(self):
+        current_id = self.settings['current_station_id']
+        next_id = current_id + 1
+        num_stations = len(self.settings['urls'])
+
+        if next_id >= num_stations:
+            self.settings['current_station_id'] = 0
+        else:
+            self.settings['current_station_id'] = next_id
+        
+        url = self.settings['urls'][self.settings['current_station_id']]
+        station_name = self.settings['stations'][self.settings['current_station_id']]
+        self._set_station(url)
+        if self.state:
+            self.start()
+        self.view.show_station(station_name, url)
+
+
+    def station_down(self):
+        current_id = self.settings['current_station_id']
+        next_id = current_id - 1
+        last_station = len(self.settings['urls']) - 1
+
+        if next_id < 0:
+            self.settings['current_station_id'] = last_station
+        else:
+            self.settings['current_station_id'] = next_id
+        
+        url = self.settings['urls'][self.settings['current_station_id']]
+        station_name = self.settings['stations'][self.settings['current_station_id']]
+        self._set_station(url)
+        if self.state:
+            self.start()
+        self.view.show_station(station_name, url)
+
+
+    def save(self):
+        save_json(self.database_loc, self.settings, self)
+        print('Saved.')
+
+
+    def close(self):
+        self.player.stop()
+        self.save()
+        self.show('Bye Bye!')
+
+
+    def show(self, *text):
+        text = [str(t) for t in text]  # Transform everything to text
+        self.view.show(' '.join(text)) # Show text

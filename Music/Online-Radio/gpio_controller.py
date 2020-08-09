@@ -1,3 +1,4 @@
+import time
 import RPi.GPIO as GPIO
 
 
@@ -39,7 +40,10 @@ class GPIOController:
         # On/Off
         GPIO.setup(12, GPIO.OUT, initial=INITIAL_VAL)  # Set pin as output
         GPIO.output(12, CURRENT_VAL)
-
+        
+        
+        self.gpio_greeting()
+        
 
         # Switch GPIO Pins - Init
 
@@ -111,3 +115,25 @@ class GPIOController:
                 station_down_action()
 
         GPIO.add_event_callback(4, callback_station_down)
+        
+    
+    def gpio_set_all(self, status):
+        # Set all connected LEDs to same on/off status
+        GPIO.output(12, status)
+        GPIO.output(18, status)
+        GPIO.output(23, status)
+        GPIO.output(24, status)
+        GPIO.output(25, status)
+        
+        
+    def gpio_greeting(self):
+        # Let LEDs light up on startup to indicate waiting for command
+        self.gpio_set_all(GPIO.LOW)
+        self.gpio_set_all(GPIO.HIGH)
+        time.sleep(0.5)
+        self.gpio_set_all(GPIO.LOW)
+        time.sleep(0.4)
+        self.gpio_set_all(GPIO.HIGH)
+        time.sleep(0.5)
+        self.gpio_set_all(GPIO.LOW)
+    

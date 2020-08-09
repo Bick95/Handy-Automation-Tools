@@ -1,10 +1,11 @@
 from model import LiveStream
 
 try:
-	from gpio_controller import GPIOController
-
+    from gpio_controller import GPIOController
+    gpio = True
 except Exception:
-	print('GPIO not available')
+    print('No GPIO available!')
+    gpio = False
 
 def execute(stream, command):
     if command in stream.commands:
@@ -32,13 +33,16 @@ def GPIO_control(stream):
                                 stream.station_down,
                                 )
     input() # Workaround to keep script alive...
+    stream.close()
 
 
 def main():
-	stream = LiveStream()
-	terminal_control(stream)
-	#GPIO_control(stream)
-
+    stream = LiveStream()
+    if gpio:
+        GPIO_control(stream)
+    else:
+        terminal_control(stream)
+        
 
 if __name__ == '__main__':
     main()

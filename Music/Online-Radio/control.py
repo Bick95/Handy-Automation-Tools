@@ -39,6 +39,7 @@ def GPIO_control(stream):
                                 stream.vol_down,
                                 stream.station_up,
                                 stream.station_down,
+                                stream.save
                                 )
     #input() # Workaround to keep script alive...
     while True:  # To keep script alive...

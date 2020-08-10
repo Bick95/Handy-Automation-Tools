@@ -9,7 +9,8 @@ class GPIOController:
                  vol_up_action,
                  vol_down_action,
                  station_up_action,
-                 station_down_action
+                 station_down_action,
+                 save_state_action
                  ):
         
         # Init GPIO
@@ -57,6 +58,7 @@ class GPIOController:
             if GPIO.input(26):
                 print('On/Off!', x)
                 on_off_action()
+                save_state_action()
 
         GPIO.add_event_callback(26, callback_on_off)
         
@@ -71,6 +73,7 @@ class GPIOController:
             if GPIO.input(13):
                 print('Vol up!', x)
                 vol_up_action()
+                save_state_action()
 
         GPIO.add_event_callback(13, callback_vol_up)
         
@@ -85,6 +88,7 @@ class GPIOController:
             if GPIO.input(22):
                 print('Vol down!', x)
                 vol_down_action()
+                save_state_action()
 
         GPIO.add_event_callback(22, callback_vol_down)
 
@@ -99,6 +103,7 @@ class GPIOController:
             if GPIO.input(27):
                 print('Station up!', x)
                 station_up_action()
+                save_state_action()
 
         GPIO.add_event_callback(27, callback_station_up)
 
@@ -113,6 +118,7 @@ class GPIOController:
             if GPIO.input(4):
                 print('Station down!', x)
                 station_down_action()
+                save_state_action()
 
         GPIO.add_event_callback(4, callback_station_down)
         

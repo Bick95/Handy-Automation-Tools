@@ -11,9 +11,6 @@ except Exception:
     print('No GPIO available!')
     gpio = False
 
-
-with open("/home/pi/Downloads/Handy-Automation-Tools/Music/Online-Radio/controllllllxxxxx1.txt", "w") as outfile:
-    outfile.write("hello")
         
 def execute(stream, command):
     if command in stream.commands:
@@ -57,6 +54,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
-    with open("/home/pi/Downloads/Handy-Automation-Tools/Music/Online-Radio/controllllllxxxxx1.txt", "w") as outfile:
-        outfile.write("Cioa!")
+

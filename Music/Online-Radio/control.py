@@ -1,3 +1,7 @@
+#!/usr/local/bin/python3.8
+import sys
+sys.path.insert(0,'/home/pi/.local/lib/python3.8/site-packages'); # Make packages available, since otherwise RPI or vlc wouldn't be found
+
 from model import LiveStream
 
 try:
@@ -7,6 +11,10 @@ except Exception:
     print('No GPIO available!')
     gpio = False
 
+
+with open("/home/pi/Downloads/Handy-Automation-Tools/Music/Online-Radio/controllllllxxxxx1.txt", "w") as outfile:
+    outfile.write("hello")
+        
 def execute(stream, command):
     if command in stream.commands:
         stream.commands[command]()
@@ -32,7 +40,9 @@ def GPIO_control(stream):
                                 stream.station_up,
                                 stream.station_down,
                                 )
-    input() # Workaround to keep script alive...
+    #input() # Workaround to keep script alive...
+    while True:  # To keep script alive...
+        pass
     stream.close()
 
 
@@ -46,3 +56,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
+    with open("/home/pi/Downloads/Handy-Automation-Tools/Music/Online-Radio/controllllllxxxxx1.txt", "w") as outfile:
+        outfile.write("Cioa!")
